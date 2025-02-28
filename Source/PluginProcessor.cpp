@@ -155,6 +155,18 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...
+        // This is where the audio processing happens   
+        /// make audio echo by adding the audio data to itself
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            channelData[sample] = channelData[sample] + channelData[sample];
+            channelData[sample] = channelData[sample] * 0.5f;
+            ///add a delay to the audio
+            if (sample > 1000)
+            {
+                channelData[sample] = channelData[sample] + channelData[sample - 1000] * 0.31456f;
+            }
+        }
     }
 }
 
